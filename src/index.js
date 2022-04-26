@@ -32,14 +32,12 @@ const addTask = (last) => {
         </div>
         <i class="fa-solid fa-ellipsis-vertical"></i></li>`;
 }
-
 addIcon.onclick = () => {
     let value = add.value;
     tasks.push({description: value, completed: false});
     addTask();
     add.value = '';
 }
-
 document.onclick = (e) => {
     if(e.target.type === "checkbox") {
         if(e.target.checked) {
