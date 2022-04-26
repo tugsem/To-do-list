@@ -34,7 +34,7 @@ To get a local copy up and running follow these simple example steps:
 
 ### Usage
 
-- Add and remove items from he list or organize them in order.
+- Add and remove items from the list or organize them in order.
 
 ## Authors
 
