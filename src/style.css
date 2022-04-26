@@ -1,3 +1,84 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  color: rgb(134, 134, 134);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
 body {
-    background-color: bisque;
+  background-color: rgb(238, 240, 241);
+  margin: 0 auto;
+  min-height: 100vh;
+  overflow-y: hidden;
+}
+
+.main-container {
+  margin: 0 15%;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+}
+
+.container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  box-shadow: 2px 2px 5px 1px #bbb;
+}
+
+#list {
+  list-style-type: none;
+}
+
+#list > li {
+  display: flex;
+  align-items: center;
+}
+
+.list-item,
+.icon {
+  display: flex;
+  justify-content: space-between;
+  background-color: #fff;
+  padding: 12px;
+  border-bottom: 1px solid rgb(228, 228, 228);
+  width: 100%;
+}
+
+#clear {
+  background-color: rgb(238, 240, 241);
+  border: 1px solid rgb(228, 228, 228);
+  padding: 14px;
+  cursor: pointer;
+}
+
+.list-item-div,
+#list-title {
+  color: #111;
+}
+
+.list-item-div {
+  display: flex;
+  gap: 0 10px;
+  align-items: center;
+}
+
+#add {
+  width: 95%;
+  border: none;
+  padding-left: 4px;
+}
+
+#add::placeholder {
+  font-style: italic;
+}
+
+#add-icon {
+  transform: rotate(90deg);
+}
+
+i {
+  cursor: pointer;
 }
