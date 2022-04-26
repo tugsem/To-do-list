@@ -7,20 +7,23 @@ const tasks = [
   {
     description: 'wash the dishes',
     completed: false,
+    index: 1,
   },
   {
     description: 'complete To Do list project',
     completed: false,
+    index: 0,
   },
 ];
 const displayTasks = () => {
+  tasks.sort((a, b) => a.index - b.index);
   tasks.forEach((task, index) => {
     task.index = index;
     ul.innerHTML += `<li class="list-item" id="${index}">
-        <div class="list-item-div">
-        <input type="checkbox">${task.description}
-        </div>
-        <i class="fa-solid fa-ellipsis-vertical"></i></li>`;
+            <div class="list-item-div">
+            <input type="checkbox">${task.description}
+            </div>
+            <i class="fa-solid fa-ellipsis-vertical"></i></li>`;
   });
 };
 const addTask = (last) => {
