@@ -63,12 +63,14 @@ body {
   display: flex;
   gap: 0 10px;
   align-items: center;
+  width: 100%;
 }
 
 #add {
   width: 95%;
   border: none;
   padding-left: 4px;
+  outline: none;
 }
 
 #add::placeholder {
@@ -81,4 +83,21 @@ body {
 
 i {
   cursor: pointer;
+}
+
+.list-inp {
+  color: #111;
+  width: 95%;
+  border: none;
+  outline: none;
+  background-color: transparent;
+}
+
+.active {
+  background-color: rgb(223, 248, 133);
+}
+
+.remove {
+  display: none;
+  color: red;
 }
