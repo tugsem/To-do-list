@@ -1,55 +1,46 @@
 import './style.css';
+import methods from '../modules/methods.js';
 
 const ul = document.querySelector('#list');
 const add = document.querySelector('#add');
 const addIcon = document.querySelector('#add-icon');
-const tasks = [
-  {
-    description: 'wash the dishes',
-    completed: false,
-    index: 1,
-  },
-  {
-    description: 'complete To Do list project',
-    completed: false,
-    index: 0,
-  },
-];
-const displayTasks = () => {
-  tasks.sort((a, b) => a.index - b.index);
-  tasks.forEach((task, index) => {
-    task.index = index;
-    ul.innerHTML += `<li class="list-item" id="${index}">
-            <div class="list-item-div">
-            <input type="checkbox">${task.description}
-            </div>
-            <i class="fa-solid fa-ellipsis-vertical"></i></li>`;
-  });
-};
-const addTask = (last) => {
-  const lastIndex = tasks.length - 1;
-  last = tasks[lastIndex];
-  ul.innerHTML += `<li class="list-item" id="${lastIndex}">
-        <div class="list-item-div">
-        <input type="checkbox">${last.description}
-        </div>
-        <i class="fa-solid fa-ellipsis-vertical"></i></li>`;
-};
+const clearChecked = document.querySelector('#clear');
+const storage = window.localStorage;
+
+// add new task
 addIcon.onclick = () => {
+  const addedTask = JSON.parse(storage.getItem('tasks')) || [];
   const { value } = add;
-  tasks.push({ description: value, completed: false });
-  addTask();
+  addedTask.push({ description: value, completed: false });
+  storage.setItem('tasks', JSON.stringify(addedTask));
+  const last = addedTask.length;
   add.value = '';
+  methods.addTask(last);
 };
-document.onclick = (e) => {
+
+// track changes on checkboxes
+ul.onclick = (e) => {
+  const tasksLs = JSON.parse(storage.getItem('tasks'));
   if (e.target.type === 'checkbox') {
-    if (e.target.checked) {
+    if (e.target.checked === true) {
       e.target.parentNode.style.textDecoration = 'line-through';
-      tasks[e.target.parentNode.parentNode.id].completed = true;
+      tasksLs[e.target.parentNode.parentNode.id].completed = true;
     } else {
       e.target.parentNode.style.textDecoration = 'none';
-      tasks[e.target.parentNode.parentNode.id].completed = false;
+      tasksLs[e.target.parentNode.parentNode.id].completed = false;
     }
   }
+  storage.setItem('tasks', JSON.stringify(tasksLs));
 };
-window.onload = displayTasks();
+// clear checked tasks from LS and html
+clearChecked.onclick = () => {
+  const tasksLS = JSON.parse(storage.getItem('tasks'));
+  const remains = tasksLS.filter((task) => task.completed === false);
+  remains.forEach((task, index) => {
+    task.index = ++index; // eslint-disable-line
+  });
+  storage.setItem('tasks', JSON.stringify(remains));
+  methods.displayTasks();
+};
+
+window.onload = methods.displayTasks();
