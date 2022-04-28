@@ -96,8 +96,3 @@ i {
 .active {
   background-color: rgb(223, 248, 133);
 }
-
-.remove {
-  display: none;
-  color: red;
-}
