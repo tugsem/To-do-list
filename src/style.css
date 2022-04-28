@@ -102,3 +102,7 @@ i {
 .active {
   background-color: rgb(223, 248, 133);
 }
+
+.checked {
+  text-decoration: line-through;
+}
