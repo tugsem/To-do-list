@@ -3,17 +3,18 @@ const add = document.querySelector('#add');
 const addIcon = document.querySelector('#add-icon');
 const clearChecked = document.querySelector('#clear');
 const storage = window.localStorage;
-let tasksLS = JSON.parse(storage.getItem('tasks')) || [];
 
 const methods = {
+  // remove item from the list
   removeItem: (item) => {
+    const editedTasks = JSON.parse(storage.getItem('tasks'));
     const itemIndx = parseInt(item.id); //eslint-disable-line
     item.remove();
-    tasksLS.splice(itemIndx, 1);
-    tasksLS.forEach((task, index) => {
+    editedTasks.splice(itemIndx, 1);
+    editedTasks.forEach((task, index) => {
         task.index = ++index; // eslint-disable-line
     });
-    storage.setItem('tasks', JSON.stringify(tasksLS));
+    storage.setItem('tasks', JSON.stringify(editedTasks));
   },
   // display trash button on click
   changeTask: () => {
@@ -32,22 +33,24 @@ const methods = {
         }
       });
       item.addEventListener('blur', () => {
+        const tasks = JSON.parse(storage.getItem('tasks'));
         item.parentNode.parentNode.lastChild.className = 'fa-solid fa-ellipsis-vertical';
         item.parentNode.parentNode.classList.remove('active');
-        tasksLS.forEach((task) => {
+        tasks.forEach((task) => {
           if (parseInt(item.parentNode.parentNode.id) + 1 === task.index) { //eslint-disable-line
             task.description = item.value;
           }
         });
-        storage.setItem('tasks', JSON.stringify(tasksLS));
+        storage.setItem('tasks', JSON.stringify(tasks));
       });
     });
   },
   // Add new task
   addTask: (index) => {
-    const task = tasksLS[index - 1];
+    const taskList = JSON.parse(storage.getItem('tasks')) || [];
+    const task = taskList[index - 1];
     task.index = index;
-    storage.setItem('tasks', JSON.stringify(tasksLS));
+    storage.setItem('tasks', JSON.stringify(taskList));
     ul.innerHTML += `<li class="list-item" id="${index - 1}">
                 <div class="list-item-div">
                 <input id="${index - 1}" type="checkbox"><input type="text" class="list-inp" value="${task.description}">
@@ -58,10 +61,10 @@ const methods = {
 
   // display the tasks in the array
   displayTasks: () => {
-    const taskList = JSON.parse(storage.getItem('tasks')) || [];
+    const taskArr = JSON.parse(storage.getItem('tasks')) || [];
     let index = 0;
     ul.innerHTML = '';
-    taskList.forEach((task) => {
+    taskArr.forEach((task) => {
       task.index = ++index; //eslint-disable-line
       ul.innerHTML += `<li class="list-item" id="${task.index - 1}">
                 <div class="list-item-div">
@@ -69,22 +72,25 @@ const methods = {
                 </div>
                 <i class="fa-solid fa-ellipsis-vertical"></i></li>`;
     });
+    storage.setItem('tasks', JSON.stringify(taskArr));
     methods.changeTask();
   },
 };
 
 // add new task
 addIcon.onclick = () => {
+  const addedTask = JSON.parse(storage.getItem('tasks')) || [];
   const { value } = add;
-  tasksLS.push({ description: value, completed: false });
-  const last = tasksLS.length;
+  addedTask.push({ description: value, completed: false });
+  storage.setItem('tasks', JSON.stringify(addedTask));
+  const last = addedTask.length;
   add.value = '';
   methods.addTask(last);
 };
 
 // track changes on checkboxes
 ul.onclick = (e) => {
-  tasksLS = JSON.parse(storage.getItem('tasks')) || [];
+  const tasksLS = JSON.parse(storage.getItem('tasks'));
   if (e.target.type === 'checkbox') {
     if (e.target.checked) {
       e.target.parentNode.style.textDecoration = 'line-through';
@@ -98,7 +104,7 @@ ul.onclick = (e) => {
 };
 // clear checked tasks from LS and html
 clearChecked.onclick = () => {
-  tasksLS = JSON.parse(storage.getItem('tasks')) || [];
+  const tasksLS = JSON.parse(storage.getItem('tasks'));
   const remains = tasksLS.filter((task) => task.completed === false);
   remains.forEach((task, index) => {
     task.index = ++index; // eslint-disable-line
@@ -106,7 +112,5 @@ clearChecked.onclick = () => {
   storage.setItem('tasks', JSON.stringify(remains));
   methods.displayTasks();
 };
-
-window.onload = methods.displayTasks();
 
 export default methods;
