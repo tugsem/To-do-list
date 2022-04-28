@@ -9,9 +9,10 @@ const methods = {
     item.remove();
     editedTasks.splice(itemIndx, 1);
     editedTasks.forEach((task, index) => {
-        task.index = ++index; // eslint-disable-line
+      task.index += index;
     });
     storage.setItem('tasks', JSON.stringify(editedTasks));
+    methods.displayTasks();
   },
   // display trash button on click
   changeTask: () => {
@@ -50,7 +51,7 @@ const methods = {
     storage.setItem('tasks', JSON.stringify(taskList));
     ul.innerHTML += `<li class="list-item" id="${index - 1}">
                 <div class="list-item-div">
-                <input id="${index - 1}" type="checkbox"><input type="text" class="list-inp" value="${task.description}">
+                <input id="${index - 1}" class="cbx" type="checkbox"><input type="text" class="list-inp" value="${task.description}">
                 </div>
                 <i class="fa-solid fa-ellipsis-vertical"></i></li>`;
     methods.changeTask();
@@ -62,10 +63,11 @@ const methods = {
     let index = 0;
     ul.innerHTML = '';
     taskArr.forEach((task) => {
-      task.index = ++index; //eslint-disable-line
+      index += 1;
+      task.index = index;
       ul.innerHTML += `<li class="list-item" id="${task.index - 1}">
                 <div class="list-item-div">
-                <input id="${task.index - 1}" type="checkbox"><input type="text" class="list-inp" value="${task.description}">
+                <input id="${task.index - 1}" class="cbx" type="checkbox"><input type="text" class="list-inp" value="${task.description}">
                 </div>
                 <i class="fa-solid fa-ellipsis-vertical"></i></li>`;
     });
