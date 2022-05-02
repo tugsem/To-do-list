@@ -1,55 +1,21 @@
 import './style.css';
+import methods from '../modules/methods.js';
+import checkStatus from '../modules/status.js';
 
-const ul = document.querySelector('#list');
 const add = document.querySelector('#add');
 const addIcon = document.querySelector('#add-icon');
-const tasks = [
-  {
-    description: 'wash the dishes',
-    completed: false,
-    index: 1,
-  },
-  {
-    description: 'complete To Do list project',
-    completed: false,
-    index: 0,
-  },
-];
-const displayTasks = () => {
-  tasks.sort((a, b) => a.index - b.index);
-  tasks.forEach((task, index) => {
-    task.index = index;
-    ul.innerHTML += `<li class="list-item" id="${index}">
-            <div class="list-item-div">
-            <input type="checkbox">${task.description}
-            </div>
-            <i class="fa-solid fa-ellipsis-vertical"></i></li>`;
-  });
-};
-const addTask = (last) => {
-  const lastIndex = tasks.length - 1;
-  last = tasks[lastIndex];
-  ul.innerHTML += `<li class="list-item" id="${lastIndex}">
-        <div class="list-item-div">
-        <input type="checkbox">${last.description}
-        </div>
-        <i class="fa-solid fa-ellipsis-vertical"></i></li>`;
-};
+const storage = window.localStorage;
+
+// add new task
 addIcon.onclick = () => {
+  const addedTask = JSON.parse(storage.getItem('tasks')) || [];
   const { value } = add;
-  tasks.push({ description: value, completed: false });
-  addTask();
+  addedTask.push({ description: value, completed: false });
+  storage.setItem('tasks', JSON.stringify(addedTask));
+  const last = addedTask.length;
   add.value = '';
+  methods.addTask(last);
 };
-document.onclick = (e) => {
-  if (e.target.type === 'checkbox') {
-    if (e.target.checked) {
-      e.target.parentNode.style.textDecoration = 'line-through';
-      tasks[e.target.parentNode.parentNode.id].completed = true;
-    } else {
-      e.target.parentNode.style.textDecoration = 'none';
-      tasks[e.target.parentNode.parentNode.id].completed = false;
-    }
-  }
-};
-window.onload = displayTasks();
+
+window.onload = methods.displayTasks();
+window.onload = checkStatus();
